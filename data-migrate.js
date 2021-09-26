@@ -8,7 +8,7 @@ const {
   TRANSFORM,
   WECHICKEN_TABLE_NAMES,
   PAGE_SIZE,
-} = require('./db-migration-helper/constants')
+} = require('./data-migration-helper/constants')
 const {
   getRows,
   createInsertIntoQuery,
@@ -17,7 +17,11 @@ const {
   filterPipe,
   executeQuery,
   getChunksByPageSize,
-} = require('./db-migration-helper/functions')
+} = require('./data-migration-helper/functions')
+const {
+  updateUsersBlogTypeId,
+  updateManagers,
+} = require('./data-migration-helper/update-users')
 
 const init = async wechickenConn => {
   return go(
@@ -69,6 +73,12 @@ const main = async () => {
 
     await etl(jwtConn, wechickenConn)
     console.log('ALL DATA MIGRATION SUCCEED')
+
+    await updateUsersBlogTypeId(wechickenConn)
+    console.log('USERS BLOG TYPE ID UPDATED')
+
+    await updateManagers(wechickenConn)
+    console.log('USERS IS_MANAGER UPDATED')
   } catch (e) {
     console.error(e)
   } finally {

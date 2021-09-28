@@ -14,5 +14,6 @@ CREATE TABLE `user` (
   `blog_type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_gmailid` (`gmail_id`),
-  UNIQUE KEY `uk_gmail` (`gmail`)
+  UNIQUE KEY `uk_gmail` (`gmail`),
+  KEY `idx_batch_id` (`batch_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -6,21 +6,21 @@ const path = require('path')
 const { executeQuery } = require('./data-migration-helper/functions')
 const { map, go, curry } = require('fxjs')
 
-const loadSQL = curry((directory, file) =>
+const readSQL = curry((directory, file) =>
   fs.readFileSync(path.join(__dirname, `${directory}/${file}`)).toString()
 )
 
 const syncSchema = async wechickenConn =>
   go(
     fs.readdirSync(path.join(__dirname, 'schemas')),
-    map(loadSQL('schemas')),
+    map(readSQL('schemas')),
     map(executeQuery(wechickenConn))
   )
 
 const seedData = async wechickenConn =>
   go(
     fs.readdirSync(path.join(__dirname, 'seeds')),
-    map(loadSQL('seeds')),
+    map(readSQL('seeds')),
     map(executeQuery(wechickenConn))
   )
 

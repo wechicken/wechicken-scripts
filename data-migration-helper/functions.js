@@ -80,6 +80,13 @@ const filterPipe = ([tableName, rows]) => {
       filtered => [tableName, filtered]
     )
 
+  if (tableName === 'blog')
+    return go(
+      rows,
+      filter(({ user_id }) => user_id),
+      filtered => [tableName, filtered]
+    )
+
   return [tableName, rows]
 }
 

@@ -13,6 +13,7 @@ const {
   replace,
   chunk,
 } = require('fxjs')
+const F = require('fxjs/Strict');
 const {
   isDateForm,
   isIrregularDateForm,

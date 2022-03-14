@@ -48,7 +48,6 @@ const USERS_TO_USER = ({
   is_group_joined,
   name: user_name,
   batch_id: wecode_nth,
-  // blog_type_id: (1, 2, 3, 4, 5, ..), // TODO: 블로그 타입 추려서 string matching 한 다음에..
   created_at,
   updated_at,
   deleted_at,
@@ -60,7 +59,7 @@ const BLOGS_TO_BLOG = ({
   subtitle,
   link,
   thumbnail,
-  written_date,
+  written_datetime,
   user_id,
   created_at,
   updated_at,
@@ -71,23 +70,27 @@ const BLOGS_TO_BLOG = ({
   subtitle,
   link,
   thumbnail,
-  written_date, // TODO: dates 테이블 JOIN 해서 written_date 칼럼 뽑아내기
+  written_datetime,
   user_id,
   created_at,
   updated_at,
   deleted_at,
 })
 
-const LIKES_TO_LIKE = ({ user_id, blog_id, status }) => ({
+const LIKES_TO_LIKE = ({ user_id, blog_id, status, created_at, updated_at }) => ({
   user_id,
   blog_id,
   status,
+  created_at,
+  updated_at
 })
 
-const BOOKMARKS_TO_BOOKMARK = ({ user_id, blog_id, status }) => ({
+const BOOKMARKS_TO_BOOKMARK = ({ user_id, blog_id, status, created_at, updated_at }) => ({
   user_id,
   blog_id,
   status,
+  created_at,
+  updated_at
 })
 
 const TRANSFORM = [

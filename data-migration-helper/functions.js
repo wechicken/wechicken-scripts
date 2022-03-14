@@ -52,7 +52,7 @@ const getRows = curry((conn, tableName) => {
         b.subtitle,
         b.link,
         b.thumbnail,
-        d.date as written_date,
+        d.date AS written_datetime,
         b.user_id,
         b.created_at,
         b.updated_at,
@@ -107,7 +107,7 @@ const handleDateform = pipe(
 
 const handleIrregularDateForm = pipe(
   replace(/\s/g, () => '0'),
-  handleDateform
+  handleDateform,
 )
 
 const DATABASE_QUERY_PARSE_ERROR_ESCAPE = /['(,)"\\]/g

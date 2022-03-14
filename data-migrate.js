@@ -1,14 +1,14 @@
 require('dotenv').config()
 
-const mysql = require('mysql2/promise')
-const { go, map } = require('fxjs')
-const L = require('fxjs/Lazy')
+const mysql = require('mysql2/promise');
+const F = require('fxjs/Strict');
+const L = require('fxjs/Lazy');
 const {
   JWT_TABLE_NAMES,
   TRANSFORM,
   WECHICKEN_TABLE_NAMES,
   PAGE_SIZE,
-} = require('./data-migration-helper/constants')
+} = require('./data-migration-helper/constants');
 const {
   getRows,
   createInsertIntoQuery,
@@ -17,33 +17,33 @@ const {
   filterPipe,
   executeQuery,
   getChunksByPageSize,
-} = require('./data-migration-helper/functions')
+} = require('./data-migration-helper/functions');
 const {
   updateUsersBlogTypeId,
   updateManagers,
-} = require('./data-migration-helper/update-users')
+} = require('./data-migration-helper/update-users');
 
 const init = async wechickenConn => {
-  return go(
+  return F.go(
     WECHICKEN_TABLE_NAMES,
-    map(truncateTable(wechickenConn)),
+    F.map(truncateTable(wechickenConn)),
     () => WECHICKEN_TABLE_NAMES,
-    map(alterAutoIncrement(wechickenConn))
-  )
+    F.map(alterAutoIncrement(wechickenConn))
+  );
 }
 
 const etl = async (jwtConn, wechickenConn) => {
-  return go(
+  return F.go(
     JWT_TABLE_NAMES,
-    map(getRows(jwtConn)),
+    F.map(getRows(jwtConn)),
     L.zip(TRANSFORM),
-    L.map(([f, rows]) => map(f, rows)),
+    F.map(([f, rows]) => F.map(f, rows)),
     L.zip(WECHICKEN_TABLE_NAMES),
     L.map(filterPipe),
     L.map(getChunksByPageSize(PAGE_SIZE)),
     L.flat,
     L.map(createInsertIntoQuery),
-    map(executeQuery(wechickenConn))
+    F.map(executeQuery(wechickenConn))
   )
 }
 

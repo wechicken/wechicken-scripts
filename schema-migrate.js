@@ -3,25 +3,34 @@ require('dotenv').config()
 const mysql = require('mysql2/promise')
 const fs = require('fs')
 const path = require('path')
-const { executeQuery } = require('./data-migration-helper/functions')
-const { map, go, curry } = require('fxjs')
+const { executeQuery, dropTable } = require('./data-migration-helper/functions')
+const F = require('fxjs')
 
-const readSQL = curry((directory, file) =>
+const readSQL = F.curry((directory, file) =>
   fs.readFileSync(path.join(__dirname, `${directory}/${file}`)).toString()
 )
 
-const syncSchema = async wechickenConn =>
-  go(
+const dropAllTables = async wechickenConn =>
+  F.go(
     fs.readdirSync(path.join(__dirname, 'schemas')),
-    map(readSQL('schemas')),
-    map(executeQuery(wechickenConn))
+    F.map(F.replace("-", "_")),
+    F.map(F.split(".")),
+    F.map(F.head),
+    F.map(dropTable(wechickenConn)),
+  )
+
+const syncSchema = async wechickenConn =>
+  F.go(
+    fs.readdirSync(path.join(__dirname, 'schemas')),
+    F.map(readSQL('schemas')),
+    F.map(executeQuery(wechickenConn))
   )
 
 const seedData = async wechickenConn =>
-  go(
+  F.go(
     fs.readdirSync(path.join(__dirname, 'seeds')),
-    map(readSQL('seeds')),
-    map(executeQuery(wechickenConn))
+    F.map(readSQL('seeds')),
+    F.map(executeQuery(wechickenConn))
   )
 
 const main = async () => {
@@ -35,6 +44,9 @@ const main = async () => {
       database: process.env.WECHICKEN_DATABASE,
       password: process.env.WECHICKEN_PASSWORD,
     })
+
+    await dropAllTables(wechickenConn)
+    console.log('DATABASE TABLES ALL DROPED')
 
     await syncSchema(wechickenConn)
     console.log('DATABASE SCHEMAS SYNC DONE')

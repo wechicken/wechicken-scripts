@@ -27,6 +27,14 @@ const executeQuery = curry((conn, query) => {
   return go(conn.execute(query), ([rows]) => rows)
 })
 
+const dropTable = curry((wechickenConn, tableName) => {
+  const query = `
+    DROP TABLE IF EXISTS \`${tableName}\`
+  `
+
+  return executeQuery(wechickenConn, query)
+})
+
 const truncateTable = curry((wechickenConn, tableName) => {
   const query = `
     TRUNCATE TABLE \`${tableName}\`
@@ -146,6 +154,7 @@ const createInsertIntoQuery = ([tableName, rows]) => {
 
 module.exports = {
   executeQuery,
+  dropTable,
   truncateTable,
   alterAutoIncrement,
   getRows,

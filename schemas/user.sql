@@ -1,7 +1,7 @@
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gmail_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gmail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gmail` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `blog_address` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
   `thumbnail` varchar(2000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,

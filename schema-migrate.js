@@ -45,6 +45,8 @@ const main = async () => {
       password: process.env.WECHICKEN_PASSWORD,
     })
 
+    console.log(wechickenConn.config)
+
     await dropAllTables(wechickenConn)
     console.log('DATABASE TABLES ALL DROPED')
 
